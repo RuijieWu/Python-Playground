@@ -2,7 +2,7 @@
 Author: JeRyWu 1365840492@qq.com
 Date: 2023-01-10 18:52:35
 LastEditors: JeRyWu 1365840492@qq.com
-LastEditTime: 2023-01-10 22:51:10
+LastEditTime: 2023-01-12 17:37:36
 FilePath: \Python-Misc\B战弹幕分析.py
 Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 '''
@@ -12,9 +12,13 @@ from bs4 import BeautifulSoup
 import datetime
 import os
 import pyecharts
+import jieba
 urlList = [
                
 ]
+wordslist = {
+    
+}
 #Input
 while True : 
     print("input quit to stop")
@@ -50,6 +54,13 @@ def GetXml(url) :
                             return xmlUrl
                         
 #Analysis
-#def Deal (words):
+def Deal (words):
+    words = jieba.lcut(words)
+    for word in words :
+        if word not in wordslist.keys() :
+            wordslist[word] = 1
+        else :
+            wordslist[word] += 1
     
-                                  
+#ShowData
+#def Show(void)                             

@@ -15,7 +15,7 @@ def getUrl(url):
     response = requests.get(url=url,headers=headers)
     return response
 if __name__ == '__main__':
-    url = 'https://www.zhihu.com/api/v4/columns/c_1261258401923026944/items?limit=1&offset=1'
+    url = 'https://www.zhihu.com/api/v4/columns/c_1261258401923026944/items?limit=1'
     data = json.loads(getUrl(url).text)["data"][0]["content"]
     content = '\n'.join(Selector(data).css('p::text').getall())
     with open(f"./{datetime.datetime.today().date()}新闻.txt","w") as f :
