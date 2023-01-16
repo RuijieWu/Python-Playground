@@ -2,7 +2,7 @@
 Author: JeRyWu 1365840492@qq.com
 Date: 2023-01-10 18:52:35
 LastEditors: JeRyWu 1365840492@qq.com
-LastEditTime: 2023-01-12 17:37:36
+LastEditTime: 2023-01-13 00:47:26
 FilePath: \Python-Misc\B战弹幕分析.py
 Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 '''
@@ -52,6 +52,9 @@ def GetXml(url) :
                             cid = soup.find("cid=(.*?)&aid=")
                             xmlUrl = f"https://comment.bilibili.com/{cid}.xml"
                             return xmlUrl
+#发现了B站用以获取视频cid的api
+#https://api.bilibili.com/x/player/pagelist?bvid={bv号}&jsonp=jsonp
+#会以json格式返回视频相关数据，其中包含视频cid
                         
 #Analysis
 def Deal (words):
