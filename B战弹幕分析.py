@@ -2,7 +2,7 @@
 Author: JeRyWu 1365840492@qq.com
 Date: 2023-01-10 18:52:35
 LastEditors: JeRyWu 1365840492@qq.com
-LastEditTime: 2023-01-13 00:47:26
+LastEditTime: 2023-01-16 23:06:54
 FilePath: \Python-Misc\B战弹幕分析.py
 Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 '''
@@ -13,6 +13,8 @@ import datetime
 import os
 import pyecharts
 import jieba
+import json
+
 urlList = [
                
 ]
@@ -40,7 +42,7 @@ def Download(url) :
         f.write(response.text)
 
 #Get Cid XML
-def GetXml(url) :
+def GetXmlByURL(url) :
     response = requests.get(url, headers=headers)
     soup = BeautifulSoup(response.text,"lxml")
     content_all = soup.find_all("div")
@@ -52,9 +54,13 @@ def GetXml(url) :
                             cid = soup.find("cid=(.*?)&aid=")
                             xmlUrl = f"https://comment.bilibili.com/{cid}.xml"
                             return xmlUrl
-#发现了B站用以获取视频cid的api
-#https://api.bilibili.com/x/player/pagelist?bvid={bv号}&jsonp=jsonp
-#会以json格式返回视频相关数据，其中包含视频cid
+
+def GetXmlByBV(bv) :
+    url = f"https://api.bilibili.com/x/player/pagelist?bvid={bv}&jsonp=jsonp"
+    res = requests.get(url)
+    cid = json.loads(res.text)["data"][0]["cid"]
+    xmlUrl = f"https://comment.bilibili.com/{cid}.xml"
+    return xmlUrl
                         
 #Analysis
 def Deal (words):
@@ -66,4 +72,5 @@ def Deal (words):
             wordslist[word] += 1
     
 #ShowData
+#做成词云图(jieba+pyechars)or报表（Pandas）
 #def Show(void)                             
