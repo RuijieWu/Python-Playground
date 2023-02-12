@@ -50,39 +50,49 @@ def InputBv() :
 
 headers = {
     "User-Agent"       : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36" ,
-    "Accept-Languages" : "zh" ,
+    #"Accept-Languages" : "zh" ,
     "Accept-Encoding"  : "utf-8"
 }
-
+'''
 #Download Approach
 def Download(url) :
     response = requests.get(url, headers=headers)
     response.encoding = 'utf-8'
     with open(f"./{datetime.date.today()}.txt") as f :
         f.write(response.text)
-
+'''
 #Get Cid XML
 def GetXmlByURL(url) :
     response = requests.get(url, headers=headers)
-    response.encoding = 'utf-8'
-    soup = BeautifulSoup(response.text,"lxml")
-    content_all = soup.find_all("div")
-    for content in content_all :
-        if type(content) != None :
-            for li in content.find_all("li") :
-                if type(li) != None :
-                    if li.attrs["cid"] != None :
-                            cid = soup.find("cid=(.*?)&aid=")
-                            xmlUrl = f"https://comment.bilibili.com/{cid}.xml"
-                            return xmlUrl
-
+    if response.status_code == 200 :
+        response.encoding = 'utf-8'
+        soup = BeautifulSoup(response.text,"lxml")
+        content_all = soup.find_all("div")
+        for content in content_all :
+            if type(content) != None :
+                for li in content.find_all("li") :
+                    if type(li) != None :
+                        if li.attrs["cid"] != None :
+                                cid = soup.find("cid=(.*?)&aid=")
+                                xmlUrl = f"https://comment.bilibili.com/{cid}.xml"
+                                return xmlUrl
+    else :
+        print(f"{url} access failed")
+        print(f"Status Code :{response.status_code}")
+        return None
+                  
 def GetXmlByBV(bv) :
     url = f"https://api.bilibili.com/x/player/pagelist?bvid={bv}&jsonp=jsonp"
     res = requests.get(url)
     res.encoding = 'utf-8'
-    cid = json.loads(res.text)["data"][0]["cid"]
-    xmlUrl = f"https://comment.bilibili.com/{cid}.xml"
-    return xmlUrl
+    if res.status_code == 200 :
+        cid = json.loads(res.text)["data"][0]["cid"]
+        xmlUrl = f"https://comment.bilibili.com/{cid}.xml"
+        return xmlUrl
+    else :
+        print(f"{url} access failed")
+        print(f"Status Code :{res.status_code}")
+        return None
                         
 #Analysis
 def DealWords (words):
