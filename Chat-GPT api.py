@@ -1,13 +1,22 @@
 import requests
 import json
-
+import time
+headers = {
+    'User-Agent' : 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/110.0',
+    'Connection':'close'
+    }
 while True:
-    url = "https://chatgpt-api.pivotstudio.cn/prompt"
+    url = "https://chatgpt-backend.pivotstudio.cn/api/prompt"
     mes = input("message:")
-    res = requests.post(url,json = {
-     "prompt" : mes
-    })
-    if res.status_code==200 :
-        print(res.content.decode("utf-8"))
-    else :
-        print("Access failed")
+    if mes == "exit":
+        break
+    else:
+        res = requests.post(url,headers = headers,json = {
+        "prompt" : mes
+        })
+        if res.status_code==200 :
+            res.encoding="utf-8"
+           # text = res.content.decode("utf-8")
+            text = res.text
+            print(text)
+            print(f"{res.status_code} Access failed")
