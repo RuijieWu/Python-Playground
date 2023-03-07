@@ -19,4 +19,7 @@ while True:
            # text = res.content.decode("utf-8")
             text = res.text
             print(text)
+        else:
             print(f"{res.status_code} Access failed")
+        sleep(1)
+    
