@@ -1,7 +1,10 @@
-import requests
+'''
+GetBaiduWiki Script
+'''
 import json
+import httpx
 
-url = "http://baike.baidu.com/api/openapi/BaikeLemmaCardApi"
+URL = "http://baike.baidu.com/api/openapi/BaikeLemmaCardApi"
 key = input("Key:")
 params = {
     "scope":103,
@@ -10,7 +13,7 @@ params = {
     "bk_key":key,
     "bk_length":600
 }
-res = requests.get(url,params=params)
+res = httpx.get(URL,params=params)
 if res.status_code == 200:
     data = json.loads(res.text)
     title = data["title"]
@@ -25,5 +28,3 @@ if res.status_code == 200:
     print(image_url)
     print(abstrcat)
     print(bk_page)
-    
-    
