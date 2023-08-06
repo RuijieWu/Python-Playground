@@ -1,38 +1,40 @@
-import requests
-import json
+'''
+get anime info 
+'''
 import datetime
-def GetNews():
-    url = "	https://bgmlist.com/api/v1/bangumi/onair"
-    weekday = datetime.date.today().weekday()
-    res = requests.get(url)
-    animelist = json.loads(res.text)["items"]
+import json
+import httpx
+URL = "	https://bgmlist.com/api/v1/bangumi/onair"
+weekday = datetime.date.today().weekday()
+def get_news() -> str:
+    '''Get News from bgmlist'''
+    resp = httpx.get(URL)
+    anime_list = json.loads(resp.text)["items"]
     week = ["一","二","三","四","五","六","日"]
     print(weekday)
-    News = f"让Tom告诉你周{week[weekday]}有哪些番剧更新٩(๑´0`๑)۶\n"
-    for anime in animelist:
+    news = f"让Tom告诉你周{week[weekday]}有哪些番剧更新٩(๑´0`๑)۶\n"
+    for anime in anime_list:
         time = anime["begin"][:10]
         clock = anime["begin"][11:19]
-        animeweekday = datetime.date(int(time[:4]),int(time[5:7]),int(time[-2:])).weekday()
-        if animeweekday==weekday:
-            News += "原名: "
-            News += anime["title"]            
-            News += "\n"
+        anime_weekday = datetime.date(int(time[:4]),int(time[5:7]),int(time[-2:])).weekday()
+        if anime_weekday==weekday:
+            news += "原名: "
+            news += anime["title"]            
+            news += "\n"
             if "zh-Hans" in anime["titleTranslate"].keys():
-                News += "中文名: "
-                News += anime["titleTranslate"]["zh-Hans"][0]                
-                News += "\n"
+                news += "中文名: "
+                news += anime["titleTranslate"]["zh-Hans"][0]                
+                news += "\n"
             else:
-                News+="尚无译名\n"
-            News += f"更新时间: {clock}\n官方网站: "
-            News += anime["officialSite"]
-            News +='\n\n'
-    News = News + "Tom好急好想赶紧看喵˃ʍ˂"
-    return News
-print(GetNews())
-    #print(anime)
-    #2023-04-09T08:00:00.000Z
+                news+="尚无译名\n"
+            news += f"更新时间: {clock}\n官方网站: "
+            news += anime["officialSite"]
+            news +='\n\n'
+    news = news + "Tom好急好想赶紧看喵˃ʍ˂"
+    return news
+if __name__ == "__main__" :
+    print(get_news)
 '''
-    
 {'title': '機動戦士ガンダム 水星の魔女 Season2', 
 'titleTranslate': {'en': ['Mobile Suit Gundam THE WITCH FROM MERCURY Season2'], 
 'zh-Hans': ['机动战士高达 水星的魔女 Season2'], 
@@ -83,4 +85,3 @@ print(GetNews())
     'pinyinTitles': ['jidongzhanshigaoda shuixingdemonv Season2', 'jdzsgd sxdmn Season2']
     }
 '''
-    
