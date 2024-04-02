@@ -1,0 +1,12 @@
+'''
+Date: 2024-04-02 15:29:10
+LastEditTime: 2024-04-02 15:29:14
+Description: 
+'''
+'''
+Config Python File
+'''
+SERVER_IP_ADDRESS = '127.0.0.1'
+SERVER_PORT_NUMBER = 7777
+SERVER_BACKLOG = 5
+BUF_SIZE = 1024
